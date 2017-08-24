@@ -3,6 +3,7 @@
   'use strict'
 
   var App = {
+    currentImageSource: '',
     CATOSSI_IMAGES_PATH: [
       'https://image.ibb.co/bzGrFv/IMG_20170520_WA0034.jpg',
       'https://image.ibb.co/jfvkav/IMG_20170519_WA0028.jpg',
@@ -38,19 +39,40 @@
     ],
 
     handlerImageChange: function (evt) {
+      this.currentImageSource = ''
       var imageContainer = document.getElementById('image-target')
       var randomNumber = Math.floor(Math.random() * this.CATOSSI_IMAGES_PATH.length)
       imageContainer.src = this.CATOSSI_IMAGES_PATH[randomNumber]
-      // imageContainer.style.width = '150px'
+      this.currentImageSource = this.CATOSSI_IMAGES_PATH[randomNumber]
+    },
+
+    loadImageOnLoadPage: function () {
+      window.addEventListener('load', this.handlerImageChange.bind(this), false)
     },
 
     addEventToButton: function () {
-      var button = document.getElementById('gettossi')
-      button.addEventListener('click', this.handlerImageChange.bind(this), false)
+      var buttonGenerate = document.getElementById('gettossi')
+      var buttonCopy = document.getElementById('copy')
+
+      buttonGenerate.addEventListener('click', this.handlerImageChange.bind(this), false)
+      buttonCopy.addEventListener('click', this.addClipboardEvent.bind(this), false)
     },
 
+    addClipboardEvent: function () {
+      var self = this
+      var clipboard = new Clipboard('#copy', {
+        text: function (trigger) {
+          return self.currentImageSource
+        }
+      })
+
+      clipboard.on('success', function (evt) {
+        window.alert('sucesso!')
+      })
+    },
 
     run: function () {
+      this.loadImageOnLoadPage()
       this.addEventToButton()
     }
   }
