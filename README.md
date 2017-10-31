@@ -1,4 +1,3 @@
-## Catossi as a service
 <p align="center">
   <h3 align="center">Catossi as a service</h3>
   <p align="center">Service to get some catossi image URL.</p>
